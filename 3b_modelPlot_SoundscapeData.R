@@ -1,6 +1,9 @@
 # Uses output of integrateSoundsscapeData.R to create plots and models for AK soundscape project
 rm(list=ls())
 
+#based on reviewer comment- changed the "presence of AIS-ships" to only ships within 20 km
+# and re-ran models
+
 #general
 library(dplyr)
 library(data.table)
@@ -57,7 +60,32 @@ sum( distA>20 )
 sum( distA<20 )
 
 #re-code nship as 0 if both distances are >20 km
+#--------------------------------------------------------------------------------
+#need to loop through each hour sample... just because multiple ships present in sample
+unique( dataSpAShWeIce$nShips )
 
+idx1 =which(dataSpAShWeIce$nShips == 1 )
+ii = idx1[1]
+idx1 =which(dataSpAShWeIce$nShips == 2 )
+ii = idx1[1]
+
+for (ii in 1:nrow(dataSpAShWeIce)){
+  #change ship presence if min distance is > 20 to 0
+  if( dataSpAShWeIce$nShips[ii]  == 1 ){
+    tmpd = as.numeric( sapply(strsplit(as.character( dataSpAShWeIce$mnDist[ii]),","), `[`, 1) )
+    if(tmpd/1000 > 20){ dataSpAShWeIce$nShips[ii] = 0  }
+  #change ship presence if min distance is > 20 to 0
+  }else if ( dataSpAShWeIce$nShips[ii]  == 2 ){
+    tp1 = as.numeric( sapply(strsplit(as.character( dataSpAShWeIce$mxDist[ii]),","), `[`, 1) )
+    if(tp1/1000 > 20){ dataSpAShWeIce$nShips[ii] = dataSpAShWeIce$nShips[ii] - 1  }
+    tp2 = as.numeric( sapply(strsplit(as.character( dataSpAShWeIce$mxDist[ii]),","), `[`, 2) )
+    if(tp2/1000 > 20){ dataSpAShWeIce$nShips[ii] =  dataSpAShWeIce$nShips[ii] - 1  }
+  }
+  
+}
+sum( dataSpAShWeIce$nShips == 0 )
+sum( dataSpAShWeIce$nShips == 1 ) #only 36 samples (hours) with ships within 20 km!!
+sum( dataSpAShWeIce$nShips == 2 )
 
 #PLOT MAP OF REGION-- Figure 1
 #--------------------------------------------------------------------------------
