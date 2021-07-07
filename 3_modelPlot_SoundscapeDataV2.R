@@ -1,6 +1,8 @@
 # Uses output of integrateSoundsscapeData.R to create plots and models for AK soundscape project
 rm(list=ls())
 
+# this is now on GitHub repo-- MM_AKSoundscape
+
 #general
 library(dplyr)
 library(data.table)
