@@ -57,7 +57,8 @@ for ( ii in 1:nrow(TwoShip) ) {
 distA = rbind(as.matrix(dist1),dist2/1000)
 hist(distA)
 sum( distA>20 )
-sum( distA<20 )
+sum( distA<=20 )
+nrow(distA)
 
 #re-code nship as 0 if both distances are >20 km
 #--------------------------------------------------------------------------------
