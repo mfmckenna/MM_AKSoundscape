@@ -12,7 +12,7 @@ rm(list=ls())
 #--------------------------------
 # BS site 
 #--------------------------------
-load("E:\\RESEARCH\\COA_Projects\\2020_COA_WCS\\data\\dataALL_BeringStraitOct2015")
+load("G:\\My Drive\\ActiveProjects\\MM_AKsoundscape\\data\\dataALL_BeringStraitOct2015")
 dataBS = dataALL 
 dataBS$Day = as.Date(dataBS$DateFstart)
 rm(dataALL)
@@ -32,7 +32,7 @@ unique(dsh$Day)
 
 # GAMBELL- year of data
 #--------------------------------
-load("E:\\RESEARCH\\COA_Projects\\2020_COA_WCS\\data\\dataSpAShWeIce")
+load("G:\\My Drive\\ActiveProjects\\MM_AKsoundscape\\data\\dataSpAShWeIce")
 dataG = dataSpAShWeIce
 dataG$Day = as.Date(dataG$dataTime)
 dataGt = dataG[ dataG$Day >= min(dataBS$Day) & dataG$Day <=max(dataBS$Day) , ]
@@ -63,7 +63,7 @@ min( unique(dataG[,156]) ) #start date
 max( unique(dataG[,156]) ) #end date
 
 #-----------------------------------------------------
-#whale occurrence without ice, baleen whale co-occurance 
+#whale occurrence without ice, baleen whale co-occurrence 
 #-----------------------------------------------------
 length( unique(dataG$Day )) #all days
 idxNoIce = subset(dataG,  dataG$ice_concentration_20km == 0)
@@ -84,7 +84,7 @@ length( unique(idxNoIce[idxNoIce$Bmy >0, 156]) ) #ice free days with baleen
     length( unique(idxNoIce$Day) )) *100 #% ice free days with baleen
 unique(idxNoIce[idxNoIce$Bmy >0, 156])   #ice free dates with whales
 
-#OVERLAP--- get unique days for both and compare, otherwise it is hourly comparisions!!
+#OVERLAP--- get unique days for both and compare, otherwise it is hourly comparisons!!
 #hourly
 length( unique(idxNoIce[idxNoIce$Bmy >0 & idxNoIce$Bal >0, 156] ) ) 
 unique(idxNoIce[idxNoIce$Bmy >0 & idxNoIce$Bal >0, 156] ) 
@@ -99,7 +99,7 @@ uBmy[idxM]
 
 
 #-----------------------------------------------------
-#whale occurrence ALL DAYS, baleen whale co-occurance 
+#whale occurrence ALL DAYS, baleen whale co-occurrence 
 #-----------------------------------------------------
 nDays = length( unique(dataG$Day )) #all days
 dcol = as.data.frame(colnames( dataG))
@@ -109,8 +109,8 @@ dcol = as.data.frame(colnames( dataG))
   nDays) *100 #% ice free days with baleen
 unique(dataG[dataG$Bal >0, 156])   #dates with whales
 
-#days with bowhead whales
-length( unique(dataG[dataG$Bmy >0,156]) ) #all days
+#days with bowhead whales.. not working missing idxIce???
+length( unique(dataG[dataG$Bmy >0,156]) )    #all days
 length( unique(idxIce[idxIce$Bmy >0, 156]) ) #ice free days with baleen
 (( length( unique(idxIce[idxIce$Bmy >0, 156])) ) /
     length( unique(idxIce$Day) )) *100 #% ice free days with baleen
