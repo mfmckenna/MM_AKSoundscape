@@ -28,37 +28,6 @@ load("G:\\My Drive\\ActiveProjects\\MM_AKsoundscape\\data\\dataSpAShWeTiIce")
 #load("D:\\RESEARCH\\COA_Projects\\2020_COA_WCS\\data\\dataSpAShWeIce")
 dataSpAShWeIce = dataSpAShWeTiIce
 
-#AIS ship ranges is 50 km too big?
-#--------------------------------------------------------------------------------
-as.data.frame( colnames(dataSpAShWeIce) )
-plot( dataSpAShWeIce$nShips )
-
-OneShip = dataSpAShWeIce[dataSpAShWeIce$nShips == 1,]
-#203 samples
-TwoShip = dataSpAShWeIce[dataSpAShWeIce$nShips > 1,]
-#9 samples
-#super low number of samples with AIS ships present
-ZeroShip = dataSpAShWeIce[dataSpAShWeIce$nShips == 0,]
-#8906 samples
-# Not important because so few samples... not to say that on those days important?
-
-#range of distances
-dist1 = (as.numeric(as.character(OneShip$mnDist)))/1000
-hist(dist1)
-dist2=NULL
-for ( ii in 1:nrow(TwoShip) ) {
-  tp1 = as.numeric( sapply(strsplit(as.character( TwoShip$mxDist[ii]),","), `[`, 1) )
-  tp2 = as.numeric( sapply(strsplit(as.character( TwoShip$mxDist[ii]),","), `[`, 2) )
-  dist2 = rbind(dist2,tp1,tp2)
-}
-distA = rbind(as.matrix(dist1),dist2/1000)
-hist(distA)
-sum( distA>20 )
-sum( distA<20 )
-
-#re-code nship as 0 if both distances are >20 km
-
-
 #PLOT MAP OF REGION-- Figure 1
 #--------------------------------------------------------------------------------
 #world map (map with ships see rdAIS_HarrisSat.r)
@@ -263,7 +232,7 @@ pBio = ggplot( mBiological2) +
   ylim( c(70,130)) +
   xlab("Frequency") +
   ylab(expression( paste("1/3 Octave Band SPL dB re: 1",mu,"Pa")) )+
-  annotate("text", x=10, y=128, label= "(C)", size=5) + 
+  annotate("text", x=5, y=128, label= "(D)", size=5) + 
   annotate("text", x=150, y=75, label= paste(src, " only samples (N = ", nrow(SOI), " on ", length(unique(SOI$dateStart) ), " days)", sep=""), size=5 )  
 pBio
 rm(src,SOI)
@@ -292,7 +261,7 @@ pShi = ggplot( mShips2) +
   ylim( c(70,130)) +
   xlab("Frequency") +
   ylab(expression( paste("1/3 Octave Band SPL dB re: 1",mu,"Pa")) )+
-  annotate("text", x=10, y=128, label= "(D)", size=5) + 
+  annotate("text", x=5, y=128, label= "(C)", size=5) + 
   annotate("text", x=150, y=75, label= paste(src, " only samples within ", dsts, " km (N = ", nrow(SOI), " on ", length(unique(SOI$dateStart) ), " days)", sep=""), size=5)  
 pShi
 rm(src,SOI)
@@ -333,7 +302,7 @@ pWS = ggplot(WSsum2, aes(x=(X2), y=value, color = X1) )+
   labs(color = "Wind speed [kts]")+
   scale_color_manual(labels = c("0", "10", "20","30","40") , values = hue_pal()(5) ) +
   xlab("Frequency") + ylab(expression( paste("Median SPL (Leq) dB re: 1",mu,"Pa"))) +
-  annotate("text", x=10, y=128, label= "(A)", size=5) + 
+  annotate("text", x=5, y=128, label= "(A)", size=5) + 
   ylim(c(70,130)) +
   theme(legend.position = c(0.8, 0.2))
 pWS
@@ -348,7 +317,7 @@ pMed = ggplot(mSOIs, aes(x=Var2, y = value, color = Var1))+
   scale_x_log10() +
   scale_color_manual(labels = c("Biological only", "AIS ships only", "Ambient") , values = c("#00BFC4","#F8766D","black") ) +
   labs(color = "Sources present")+
-  annotate("text", x=10, y=128, label= "(B)", size=5) + 
+  annotate("text", x=5, y=128, label= "(B)", size=5) + 
   xlab("Frequency") + ylab(expression( paste("Median SPL (Leq) dB re: 1",mu,"Pa"))) +
   theme(legend.position = c(0.8, 0.2))+
   ylim(c(70,130))
@@ -356,7 +325,7 @@ pMed
 
 #FIG. 4 A-D
 library(gridExtra)
-grid.arrange(pWS, pMed, pBio, pShi, ncol=2, nrow = 2)
+grid.arrange(pWS, pShi, pMed, pBio,  ncol=2, nrow = 2)
 
 ## RESPONSE variable-- ambient sound levels in octave bands
 #--------------------------------------------------------------------------------

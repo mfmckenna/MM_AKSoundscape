@@ -50,16 +50,16 @@ dist1 = (as.numeric(as.character(OneShip$mnDist)))/1000
 hist(dist1)
 dist2=NULL
 for ( ii in 1:nrow(TwoShip) ) {
-  tp1 = as.numeric( sapply(strsplit(as.character( TwoShip$mxDist[ii]),","), `[`, 1) )
-  tp2 = as.numeric( sapply(strsplit(as.character( TwoShip$mxDist[ii]),","), `[`, 2) )
+  tp1 = as.numeric( sapply(strsplit(as.character( TwoShip$mnDist[ii]),","), `[`, 1) )
+  tp2 = as.numeric( sapply(strsplit(as.character( TwoShip$mnDist[ii]),","), `[`, 2) )
   dist2 = rbind(dist2,tp1,tp2)
 }
 distA = rbind(as.matrix(dist1),dist2/1000)
 hist(distA)
-sum( distA>20 )
+sum( distA>20 )/nrow(distA)
 sum( distA<=20 )
-nrow(distA)
-
+sum( distA<=20 )/nrow(distA)
+min(distA)
 #re-code nship as 0 if both distances are >20 km
 #--------------------------------------------------------------------------------
 #need to loop through each hour sample... just because multiple ships present in sample
@@ -292,7 +292,7 @@ pBio = ggplot( mBiological2) +
   ylim( c(70,130)) +
   xlab("Frequency") +
   ylab(expression( paste("1/3 Octave Band SPL dB re: 1",mu,"Pa")) )+
-  annotate("text", x=10, y=128, label= "(C)", size=5) + 
+  annotate("text", x=10, y=128, label= "(D)", size=5) + 
   annotate("text", x=150, y=75, label= paste(src, " only samples (N = ", nrow(SOI), " on ", length(unique(SOI$dateStart) ), " days)", sep=""), size=5 )  
 pBio
 rm(src,SOI)
@@ -321,7 +321,7 @@ pShi = ggplot( mShips2) +
   ylim( c(70,130)) +
   xlab("Frequency") +
   ylab(expression( paste("1/3 Octave Band SPL dB re: 1",mu,"Pa")) )+
-  annotate("text", x=10, y=128, label= "(D)", size=5) + 
+  annotate("text", x=10, y=128, label= "(C)", size=5) + 
   annotate("text", x=150, y=75, label= paste(src, " only samples within ", dsts, " km (N = ", nrow(SOI), " on ", length(unique(SOI$dateStart) ), " days)", sep=""), size=5)  
 pShi
 rm(src,SOI)
@@ -385,7 +385,7 @@ pMed
 
 #FIG. 4 A-D
 library(gridExtra)
-grid.arrange(pWS, pMed, pBio, pShi, ncol=2, nrow = 2)
+grid.arrange(pWS,  pShi,  pMed, pBio, ncol=2, nrow = 2)
 
 ## RESPONSE variable-- ambient sound levels in octave bands
 #--------------------------------------------------------------------------------
